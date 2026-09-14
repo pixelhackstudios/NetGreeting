@@ -54,6 +54,9 @@ case "${os}" in
     ;;
 esac
 
+# Staging tree is huge (especially with Qt on Mac/Windows). Keep only the installers.
+rm -rf "${DIST}/_CPack_Packages"
+
 echo
 echo "Packages are in: ${DIST}"
 ls -lh "${DIST}"
