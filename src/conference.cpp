@@ -190,6 +190,15 @@ void Conference::sendShareJpeg(const QByteArray &jpeg)
   broadcast(ng::Msg::ShareFrame, jpeg);
 }
 
+void Conference::sendHold(bool on)
+{
+  if (!m_inCall)
+    return;
+  QJsonObject o{{QStringLiteral("on"), on},
+                {QStringLiteral("from"), m_id.displayName()}};
+  broadcast(ng::Msg::Hold, jsonBytes(o));
+}
+
 quint32 Conference::offerFile(const QString &path)
 {
   QFileInfo fi(path);
@@ -346,6 +355,7 @@ void Conference::dropPeer(Peer *p, const QString &reason)
       m_inCall = false;
       m_placing = false;
       m_primaryName.clear();
+      m_peerOnHold = false;
       m_ping.stop();
       m_fileTimer.stop();
       clearFiles();
@@ -363,6 +373,7 @@ void Conference::beginConference(Peer *p)
   m_inCall = true;
   m_placing = false;
   m_primaryName = p->name;
+  m_peerOnHold = false;
   m_ping.start();
   m_fileTimer.start();
   sendParticipantList();
@@ -530,6 +541,16 @@ void Conference::handleMessage(Peer *p, ng::Msg type, const QByteArray &payload)
   }
   case ng::Msg::Participants: {
     emit participantsChanged();
+    break;
+  }
+  case ng::Msg::Hold: {
+    const auto o = jsonParse(payload);
+    const bool on = o.value(QStringLiteral("on")).toBool();
+    const QString from = o.value(QStringLiteral("from")).toString(p->name);
+    m_peerOnHold = on;
+    emit peerHoldChanged(on, from);
+    emit statusMessage(on ? tr("%1 put you on hold.").arg(from)
+                          : tr("%1 resumed the call.").arg(from));
     break;
   }
   case ng::Msg::Ping:

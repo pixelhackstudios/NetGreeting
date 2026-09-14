@@ -83,6 +83,8 @@ MainWindow::MainWindow(Identity id, QWidget *parent)
       m_conf->rejectIncoming();
   });
   connect(m_conf, &Conference::callStarted, this, [this](const QString &, const QString &) {
+    m_onHold = false;
+    m_peerOnHold = false;
     startMedia();
     m_nameBanner->setText(m_conf->peerName());
     updateStatus();
@@ -90,10 +92,16 @@ MainWindow::MainWindow(Identity id, QWidget *parent)
   connect(m_conf, &Conference::callEnded, this, [this](const QString &reason) {
     stopMedia();
     m_sharing = false;
+    m_onHold = false;
+    m_peerOnHold = false;
     m_shareTimer->stop();
     m_remoteFrame = {};
     m_nameBanner->setText(m_id.displayName());
     statusBar()->showMessage(reason);
+    updateStatus();
+  });
+  connect(m_conf, &Conference::peerHoldChanged, this, [this](bool on, const QString &) {
+    m_peerOnHold = on;
     updateStatus();
   });
   connect(m_conf, &Conference::participantsChanged, this, [this] {
@@ -141,12 +149,17 @@ MainWindow::MainWindow(Identity id, QWidget *parent)
       m_video->setFrame(img);
       m_video->setPipVisible(false);
     } else if (m_conf->inCall()) {
-      m_video->setPipFrame(img);
-      m_video->setPipVisible(!m_dataOnly);
+      if (!m_onHold)
+        m_video->setPipFrame(img);
+      m_video->setPipVisible(!m_dataOnly && !m_onHold);
     }
   });
   connect(m_camera, &CameraCapture::failed, this, [this](const QString &e) { statusBar()->showMessage(e, 4000); });
-  connect(m_audio, &AudioEngine::captured, m_conf, &Conference::sendAudioPcm);
+  connect(m_audio, &AudioEngine::captured, this, [this](const QByteArray &pcm) {
+    if (m_onHold || !m_conf->inCall())
+      return;
+    m_conf->sendAudioPcm(pcm);
+  });
   connect(m_audio, &AudioEngine::failed, this, [this](const QString &e) { statusBar()->showMessage(e, 4000); });
 
   connect(m_mediaTimer, &QTimer::timeout, this, &MainWindow::sendMediaTick);
@@ -211,14 +224,19 @@ void MainWindow::buildUi()
 
   auto *callBtn = new QPushButton(netGreetingIcon(QStringLiteral("call")), tr("Place Call"));
   auto *endBtn = new QPushButton(netGreetingIcon(QStringLiteral("hangup")), tr("End Call"));
+  m_holdBtn = new QPushButton(netGreetingIcon(QStringLiteral("hold")), tr("Hold"));
+  m_holdBtn->setToolTip(tr("Put the call on hold: stop sending camera and microphone"));
+  m_holdBtn->setEnabled(false);
   auto *dirBtn = new QPushButton(netGreetingIcon(QStringLiteral("directory")), tr("Directory"));
   connect(callBtn, &QPushButton::clicked, this, &MainWindow::showPlaceCall);
   connect(endBtn, &QPushButton::clicked, this, [this] { m_conf->hangup(); });
+  connect(m_holdBtn, &QPushButton::clicked, this, [this] { setOnHold(!m_onHold); });
   connect(dirBtn, &QPushButton::clicked, this, &MainWindow::showDirectory);
 
   auto *btns = new QHBoxLayout;
   btns->addWidget(callBtn);
   btns->addWidget(endBtn);
+  btns->addWidget(m_holdBtn);
   btns->addWidget(dirBtn);
 
   m_nameBanner = new QLabel(m_id.displayName());
@@ -271,6 +289,9 @@ void MainWindow::buildMenus()
   call->addAction(tr("&New Call..."), this, &MainWindow::showPlaceCall)->setShortcut(QKeySequence::New);
   call->addAction(tr("&Directory..."), this, &MainWindow::showDirectory);
   call->addSeparator();
+  m_holdAct = call->addAction(tr("&Hold (stop camera + mic)"), this, [this] { setOnHold(!m_onHold); });
+  m_holdAct->setShortcut(QKeySequence(QStringLiteral("Ctrl+H")));
+  m_holdAct->setEnabled(false);
   call->addAction(tr("&Hang Up"), this, [this] { m_conf->hangup(); });
   call->addSeparator();
   call->addAction(tr("E&xit"), this, &QWidget::close)->setShortcut(QKeySequence::Quit);
@@ -401,14 +422,48 @@ void MainWindow::setDataOnly(bool on)
 {
   m_dataOnly = on;
   m_previewStack->setVisible(!on);
-  m_video->setPipVisible(!on && m_conf->inCall());
+  m_video->setPipVisible(!on && m_conf->inCall() && !m_onHold);
+}
+
+void MainWindow::setOnHold(bool on)
+{
+  if (m_onHold == on)
+    return;
+  if (on && !m_conf->inCall()) {
+    statusBar()->showMessage(tr("Not in a call."));
+    return;
+  }
+  m_onHold = on;
+  // Stop outgoing camera + microphone, but keep playing what we receive.
+  m_audio->setCaptureEnabled(!on && m_id.sendAudio);
+  m_audio->setPlaybackEnabled(true);
+  m_video->setPipVisible(!on && !m_dataOnly && m_conf->inCall());
+  m_conf->sendHold(on);
+  if (m_holdBtn) {
+    m_holdBtn->setText(on ? tr("Resume") : tr("Hold"));
+    m_holdBtn->setIcon(netGreetingIcon(on ? QStringLiteral("resume") : QStringLiteral("hold")));
+  }
+  if (m_holdAct) {
+    m_holdAct->setText(on ? tr("&Resume call") : tr("&Hold (stop camera + mic)"));
+  }
+  updateStatus();
 }
 
 void MainWindow::startMedia()
 {
+  m_onHold = false;
+  m_peerOnHold = false;
   m_mediaTimer->start(1000 / std::max(1, m_id.videoFps()));
-  if (m_id.sendAudio)
-    m_audio->start(true, true);
+  m_audio->start(m_id.sendAudio, true);
+  if (m_holdBtn) {
+    m_holdBtn->setEnabled(true);
+    m_holdBtn->setText(tr("Hold"));
+    m_holdBtn->setIcon(netGreetingIcon(QStringLiteral("hold")));
+  }
+  if (m_holdAct) {
+    m_holdAct->setEnabled(true);
+    m_holdAct->setText(tr("&Hold (stop camera + mic)"));
+  }
 }
 
 void MainWindow::stopMedia()
@@ -418,14 +473,28 @@ void MainWindow::stopMedia()
   m_video->setPipVisible(false);
   if (!m_localFrame.isNull())
     m_video->setFrame(m_localFrame);
+  if (m_holdBtn) {
+    m_holdBtn->setEnabled(false);
+    m_holdBtn->setText(tr("Hold"));
+    m_holdBtn->setIcon(netGreetingIcon(QStringLiteral("hold")));
+  }
+  if (m_holdAct) {
+    m_holdAct->setEnabled(false);
+    m_holdAct->setText(tr("&Hold (stop camera + mic)"));
+  }
 }
 
 void MainWindow::updateStatus()
 {
   const QString ip = Conference::localIPv4Addresses().value(0);
-  if (m_conf->inCall())
-    statusBar()->showMessage(tr("In a call with %1").arg(m_conf->peerName()));
-  else if (m_conf->isListening())
+  if (m_conf->inCall()) {
+    if (m_onHold)
+      statusBar()->showMessage(tr("On hold — camera and microphone stopped. Click Resume."));
+    else if (m_peerOnHold)
+      statusBar()->showMessage(tr("%1 is on hold.").arg(m_conf->peerName()));
+    else
+      statusBar()->showMessage(tr("In a call with %1").arg(m_conf->peerName()));
+  } else if (m_conf->isListening())
     statusBar()->showMessage(tr("Not in a call. %1:%2").arg(ip).arg(m_conf->listenPort()));
   else
     statusBar()->showMessage(tr("Not listening."));
@@ -445,7 +514,7 @@ QByteArray MainWindow::jpegOf(const QImage &img, int quality, int w, int h) cons
 
 void MainWindow::sendMediaTick()
 {
-  if (!m_conf->inCall() || !m_id.sendVideo)
+  if (!m_conf->inCall() || !m_id.sendVideo || m_onHold)
     return;
   const QByteArray jpeg = jpegOf(m_localFrame, m_id.jpegQuality(), m_id.videoWidth(), m_id.videoHeight());
   m_conf->sendVideoJpeg(jpeg);

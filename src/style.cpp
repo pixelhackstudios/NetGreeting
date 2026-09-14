@@ -145,6 +145,23 @@ QIcon netGreetingIcon(const QString &name)
     p.drawRect(QRectF(3, 4, 18, 16));
     p.setBrush(QColor(0, 80, 160));
     p.drawRect(QRectF(12, 12, 8, 6));
+  } else if (name == QLatin1String("hold")) {
+    p.setBrush(QColor(160, 120, 20));
+    p.setPen(QPen(QColor(80, 60, 0), 1));
+    p.drawRoundedRect(QRectF(5, 3, 14, 18), 3, 3);
+    p.setBrush(Qt::white);
+    p.setPen(Qt::NoPen);
+    p.drawRect(QRectF(9, 7, 3, 10));
+    p.drawRect(QRectF(13, 7, 3, 10));
+  } else if (name == QLatin1String("resume")) {
+    p.setBrush(QColor(32, 96, 48));
+    p.setPen(QPen(QColor(16, 48, 24), 1));
+    p.drawRoundedRect(QRectF(5, 3, 14, 18), 3, 3);
+    QPolygonF tri;
+    tri << QPointF(10, 7) << QPointF(10, 17) << QPointF(16, 12);
+    p.setBrush(Qt::white);
+    p.setPen(Qt::NoPen);
+    p.drawPolygon(tri);
   } else {
     p.setBrush(QColor(10, 36, 106));
     p.drawEllipse(QRectF(4, 4, 16, 16));

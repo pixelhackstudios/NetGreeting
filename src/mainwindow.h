@@ -21,6 +21,8 @@ class QListWidget;
 class QStackedWidget;
 class QLineEdit;
 class QTimer;
+class QPushButton;
+class QAction;
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
@@ -46,6 +48,7 @@ private:
   void showOptions();
   void setCompact(bool on);
   void setDataOnly(bool on);
+  void setOnHold(bool on);
   QByteArray jpegOf(const QImage &img, int quality, int w, int h) const;
   void sendMediaTick();
   void sendShareTick();
@@ -69,6 +72,8 @@ private:
   QWidget *m_dialPad = nullptr;
   QLineEdit *m_dialField = nullptr;
   QLabel *m_status = nullptr;
+  QPushButton *m_holdBtn = nullptr;
+  QAction *m_holdAct = nullptr;
   QTimer *m_mediaTimer = nullptr;
   QTimer *m_shareTimer = nullptr;
   QImage m_localFrame;
@@ -76,5 +81,7 @@ private:
   bool m_sharing = false;
   bool m_dataOnly = false;
   bool m_showDialPad = false;
+  bool m_onHold = false;
+  bool m_peerOnHold = false;
   bool m_autoAccept = false;
 };

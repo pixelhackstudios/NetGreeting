@@ -36,6 +36,7 @@ enum class Msg : quint8 {
   AudioFrame = 41,
   ShareFrame = 42,
   Participants = 50,
+  Hold = 51,
   Ping = 60,
   Pong = 61,
 };
@@ -94,6 +95,7 @@ inline QString msgName(Msg m)
   case Msg::AudioFrame: return QStringLiteral("AudioFrame");
   case Msg::ShareFrame: return QStringLiteral("ShareFrame");
   case Msg::Participants: return QStringLiteral("Participants");
+  case Msg::Hold: return QStringLiteral("Hold");
   case Msg::Ping: return QStringLiteral("Ping");
   case Msg::Pong: return QStringLiteral("Pong");
   }

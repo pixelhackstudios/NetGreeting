@@ -12,6 +12,8 @@ public:
 
   bool start(bool capture, bool playback);
   void stop();
+  void setCaptureEnabled(bool on);
+  void setPlaybackEnabled(bool on);
   void playPcm(const QByteArray &pcm);
   bool captureEnabled() const { return m_captureOn; }
   bool playbackEnabled() const { return m_playOn; }

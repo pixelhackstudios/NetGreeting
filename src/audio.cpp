@@ -141,6 +141,31 @@ void AudioEngine::stop()
   m_playOn = false;
 }
 
+void AudioEngine::setCaptureEnabled(bool on)
+{
+  m_captureOn = on;
+#ifdef HAVE_PULSE
+  if (on && !m_capture) {
+    m_capture = new CaptureThread;
+    m_capture->setObjectName(QStringLiteral("ng-audio-capture"));
+    m_capture->engine = this;
+    m_capture->start();
+  }
+#endif
+}
+
+void AudioEngine::setPlaybackEnabled(bool on)
+{
+  m_playOn = on;
+#ifdef HAVE_PULSE
+  if (on && !m_play) {
+    m_play = new PlaybackThread;
+    m_play->setObjectName(QStringLiteral("ng-audio-play"));
+    m_play->start();
+  }
+#endif
+}
+
 void AudioEngine::playPcm(const QByteArray &pcm)
 {
 #ifdef HAVE_PULSE

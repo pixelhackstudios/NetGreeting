@@ -41,6 +41,7 @@ public:
   void sendVideoJpeg(const QByteArray &jpeg);
   void sendAudioPcm(const QByteArray &pcm);
   void sendShareJpeg(const QByteArray &jpeg);
+  void sendHold(bool on);
 
   quint32 offerFile(const QString &path);
   void acceptFile(quint32 transferId, const QString &savePath);
@@ -60,6 +61,7 @@ signals:
   void shareFrameReceived(const QImage &img);
   void audioFrameReceived(const QByteArray &pcm);
   void participantsChanged();
+  void peerHoldChanged(bool onHold, const QString &from);
   void fileOffered(quint32 id, const QString &from, const QString &name, qint64 size);
   void fileProgress(quint32 id, const QString &name, qint64 received, qint64 total, bool outbound);
   void fileFinished(quint32 id, const QString &name, const QString &path, bool ok, const QString &error);
@@ -123,6 +125,7 @@ private:
   QPointer<QTcpSocket> m_outgoing;
   bool m_inCall = false;
   bool m_placing = false;
+  bool m_peerOnHold = false;
   QString m_primaryName;
   QString m_pendingName;
   QString m_pendingHost;

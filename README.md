@@ -32,6 +32,7 @@ During a call you can:
 
 - See each other on camera (or a test pattern if the camera isn’t available)
 - Talk
+- Click **Hold** to stop sending your camera and microphone (the other person waits, you still see and hear them). Click **Resume** to come back.
 - Open **Chat**
 - Open **Whiteboard** and draw together
 - Send a file
