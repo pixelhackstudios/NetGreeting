@@ -1,96 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NetGreeting</title>
-  <meta name="description" content="A small video-call program, like Microsoft NetMeeting. No account.">
+  <meta name="description"
+    content="A video-call program, like Microsoft NetMeeting. No account. Type your name and call whoever is on the directory.">
   <link rel="icon" href="./assets/icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=6">
+  <link rel="stylesheet" href="./styles.css?v=12">
 </head>
+
 <body>
-  <header class="top">
-    <a class="wordmark" href="./">
-      <img src="./assets/icon.png" width="36" height="36" alt="">
-      NetGreeting
-    </a>
-    <a class="src" href="https://github.com/pixelhackstudios/NetGreeting">Source on GitHub</a>
-  </header>
+  <div class="desktop" id="desktop">
+    <nav class="icons" aria-label="Downloads">
+      <a class="desk-icon"
+        href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-win64.exe">
+        <span class="ico ico-win" aria-hidden="true"></span>
+        <span>Windows.exe</span>
+      </a>
+      <a class="desk-icon"
+        href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-Darwin.dmg">
+        <span class="ico ico-mac" aria-hidden="true"></span>
+        <span>Macintosh.dmg</span>
+      </a>
+      <a class="desk-icon"
+        href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting_0.1.0_amd64.deb">
+        <span class="ico ico-deb" aria-hidden="true"></span>
+        <span>Ubuntu.deb</span>
+      </a>
+      <a class="desk-icon"
+        href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-1.x86_64.rpm">
+        <span class="ico ico-rpm" aria-hidden="true"></span>
+        <span>Fedora.rpm</span>
+      </a>
+      <a class="desk-icon" href="https://github.com/pixelhackstudios/NetGreeting">
+        <span class="ico ico-src" aria-hidden="true"></span>
+        <span>Source code</span>
+      </a>
+      <button class="desk-icon" type="button" data-open="win-readme">
+        <span class="ico ico-txt" aria-hidden="true"></span>
+        <span>Read Me.txt</span>
+      </button>
+    </nav>
 
-  <main>
-    <section class="intro">
-      <p class="kicker">Version 0.1</p>
-      <h1>Call a person on another computer.</h1>
-      <p class="dek">
-        NetGreeting is a small video-call program in the spirit of Microsoft NetMeeting.
-        There is no account. You type your name, open the directory, and call whoever is on it.
-      </p>
-    </section>
-
-    <figure class="hero">
-      <img src="./assets/shot-call.png?v=4" alt="NetGreeting during a call. One person fills the video; a second person sits in the corner.">
-    </figure>
-
-    <section class="get" id="download">
-      <h2>Get the program</h2>
-      <div class="files">
-        <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-win64.exe">
-          <strong>Windows</strong>
-          <span>netgreeting-0.1.0-win64.exe</span>
-        </a>
-        <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-Darwin.dmg">
-          <strong>Macintosh</strong>
-          <span>netgreeting-0.1.0-Darwin.dmg</span>
-        </a>
-        <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting_0.1.0_amd64.deb">
-          <strong>Ubuntu &amp; Debian</strong>
-          <span>netgreeting_0.1.0_amd64.deb</span>
-        </a>
-        <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-1.x86_64.rpm">
-          <strong>Fedora</strong>
-          <span>netgreeting-0.1.0-1.x86_64.rpm</span>
-        </a>
+    <article class="win notepad" id="win-readme" data-title="Read Me.txt"
+      style="left:108px;top:48px;width:258px;height:452px;z-index:5">
+      <div class="titlebar" data-drag>
+        <span>Untitled - Notepad</span>
+        <span class="caps">
+          <button type="button" class="cap min" data-min title="Minimize" aria-label="Minimize"></button>
+          <button type="button" class="cap max" data-max title="Maximize" aria-label="Maximize"></button>
+          <button type="button" class="cap close" data-close title="Close" aria-label="Close"></button>
+        </span>
       </div>
-      <p class="more"><a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest">Everything else, including a Windows zip</a></p>
-    </section>
+      <div class="menubar">File&nbsp;&nbsp;Edit&nbsp;&nbsp;Search&nbsp;&nbsp;Help</div>
+      <pre>NetGreeting
+===========
 
-    <section class="strip">
-      <figure>
-        <img src="./assets/shot-idle.png?v=4" alt="Waiting for a call, camera preview on.">
-        <figcaption>Waiting</figcaption>
-      </figure>
-      <figure>
-        <img src="./assets/shot-directory.png?v=4" alt="Directory of people who are online.">
-        <figcaption>Directory</figcaption>
-      </figure>
-      <figure>
-        <img src="./assets/shot-chat.png?v=4" alt="Text chat.">
-        <figcaption>Chat</figcaption>
-      </figure>
-      <figure>
-        <img src="./assets/shot-whiteboard.png?v=4" alt="Shared whiteboard.">
-        <figcaption>Whiteboard</figcaption>
-      </figure>
-    </section>
+A video-call program, like Microsoft
+NetMeeting on a beige PC in 1999.
 
-    <section class="how">
-      <h2>How you use it</h2>
-      <ol>
-        <li>Install it and open it.</li>
-        <li>Under <b>Tools → Options</b>, type your first name.</li>
-        <li>Open <b>Call → Directory</b>.</li>
-        <li>Click a name, then <b>Call</b>. If someone calls you, click <b>Accept</b>.</li>
-      </ol>
-      <p>While you are in a call you can chat, draw on a whiteboard, send a file, or share your screen (they can watch; they cannot take over).</p>
-      <p class="fine">The people in the pictures are stand-ins, not real users. Both of you need the app open at the same time. The directory is only a phone book — the call goes from your computer to theirs, and a home network may block it. Calls are not encrypted.</p>
-    </section>
-  </main>
+There is no account.
+Open it. Type your name.
+Call → Directory.
+If a friend is on the list, call
+them.
 
-  <footer>
-    <p>NetGreeting. A call should start with hello.</p>
+Chat, whiteboard, files, desktop
+share.
+
+The people in the windows are
+stand-ins.
+
+Both of you need the app open.
+The directory is only a phone
+book; the call goes computer to
+computer.
+Not encrypted. Friends only.
+
+Double-click an icon on the left
+to download for your computer.
+</pre>
+      <div class="grip" data-resize></div>
+    </article>
+
+    <article class="win app" id="win-call" data-title="NetGreeting" style="left:372px;top:18px;width:258px;z-index:4">
+      <div class="titlebar" data-drag>
+        <span>NetGreeting</span>
+        <span class="dots">
+          <button type="button" data-min title="Minimize" aria-label="Minimize"></button>
+          <button type="button" data-max title="Maximize" aria-label="Maximize"></button>
+          <button type="button" data-close title="Close" aria-label="Close"></button>
+        </span>
+      </div>
+      <div class="menubar">
+        <span><u>C</u>all</span><span><u>V</u>iew</span><span><u>T</u>ools</span><span><u>H</u>elp</span>
+      </div>
+      <div class="body">
+        <div class="video-wrap">
+          <img class="video" src="./assets/priya.jpg" alt="Priya Cole on camera">
+          <img class="pip" src="./assets/sam.jpg" alt="Sam Okada in the corner">
+        </div>
+        <div class="row">
+          <button type="button" class="btn">Place Call</button>
+          <button type="button" class="btn">End Call</button>
+          <button type="button" class="btn" data-open="win-dir">Directory</button>
+        </div>
+        <div class="banner">Priya Cole</div>
+        <div class="small">Current Call / Meeting</div>
+        <div class="list">Priya Cole<br>Sam Okada (you)</div>
+        <div class="tools">
+          <button type="button" class="iconbtn" title="Share desktop" aria-label="Share desktop">🖥</button>
+          <button type="button" class="iconbtn" title="Chat" aria-label="Chat" data-open="win-chat">💬</button>
+          <button type="button" class="iconbtn" title="Whiteboard" aria-label="Whiteboard"
+            data-open="win-board">✎</button>
+          <button type="button" class="iconbtn" title="Send a file" aria-label="Send a file">📄</button>
+        </div>
+      </div>
+      <div class="status">In a call with Priya Cole</div>
+      <div class="grip" data-resize></div>
+    </article>
+
+    <article class="win app wide" id="win-dir" data-title="Directory" style="left:644px;top:12px;width:400px;z-index:2">
+      <div class="titlebar" data-drag>
+        <span>NetGreeting - Directory</span>
+        <span class="dots">
+          <button type="button" data-min title="Minimize" aria-label="Minimize"></button>
+          <button type="button" data-max title="Maximize" aria-label="Maximize"></button>
+          <button type="button" data-close title="Close" aria-label="Close"></button>
+        </span>
+      </div>
+      <div class="body">
+        <p class="blurb">This is the shared NetGreeting directory. Anyone who is running the app and listed here can be
+          called.</p>
+        <div class="tabs" role="tablist">
+          <button type="button" class="tab on" role="tab" aria-selected="true">Greeting Post</button>
+          <button type="button" class="tab" role="tab" aria-selected="false">Nearby</button>
+          <button type="button" class="tab" role="tab" aria-selected="false">SpeedDial</button>
+        </div>
+        <p class="logged">Logged on to Greeting Post as Helen Voss.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>Address</th>
+                <th>Port</th>
+                <th>Comments</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="you">
+                <td>Helen Voss (you)</td>
+                <td>Portland</td>
+                <td>203.0.113.12</td>
+                <td>1720</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Priya Cole</td>
+                <td>Austin</td>
+                <td>198.51.100.44</td>
+                <td>1720</td>
+                <td>coffee first</td>
+              </tr>
+              <tr>
+                <td>Sam Okada</td>
+                <td>Chicago</td>
+                <td>192.0.2.81</td>
+                <td>1721</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row start">
+          <button type="button" class="btn fixed">Call</button>
+          <button type="button" class="btn fixed widebtn">Add to SpeedDial</button>
+        </div>
+      </div>
+      <div class="grip" data-resize></div>
+    </article>
+
+    <article class="win app wide" id="win-board" data-title="Whiteboard"
+      style="left:108px;top:504px;width:348px;z-index:6">
+      <div class="titlebar" data-drag>
+        <span>NetGreeting - Whiteboard</span>
+        <span class="dots">
+          <button type="button" data-min title="Minimize" aria-label="Minimize"></button>
+          <button type="button" data-max title="Maximize" aria-label="Maximize"></button>
+          <button type="button" data-close title="Close" aria-label="Close"></button>
+        </span>
+      </div>
+      <div class="body">
+        <div class="palette">
+          <button type="button" class="btn">Pen</button>
+          <button type="button" class="btn">Highlight</button>
+          <button type="button" class="btn">Rect</button>
+          <button type="button" class="btn">Text</button>
+          <span class="swatch" style="background:#000"></span>
+          <span class="swatch" style="background:#00c"></span>
+          <span class="swatch" style="background:#c00"></span>
+          <span class="swatch" style="background:#060"></span>
+          <button type="button" class="btn" style="margin-left:auto">Clear</button>
+        </div>
+        <div class="board">
+          <svg viewBox="0 0 520 280" aria-hidden="true">
+            <path d="M40 200 C 80 40, 160 40, 210 160" fill="none" stroke="#0033aa" stroke-width="3"
+              stroke-linecap="round" />
+            <rect x="280" y="70" width="120" height="80" fill="none" stroke="#cc0000" stroke-width="2" />
+            <text x="40" y="250" fill="#060" font-size="18" font-family="Tahoma, sans-serif">ship Friday?</text>
+          </svg>
+          <div class="pointer"><span>Priya</span></div>
+        </div>
+      </div>
+      <div class="grip" data-resize></div>
+    </article>
+
+    <article class="win app wide" id="win-chat" data-title="Chat" style="left:636px;top:272px;width:328px;z-index:3">
+      <div class="titlebar" data-drag>
+        <span>NetGreeting - Chat</span>
+        <span class="dots">
+          <button type="button" data-min title="Minimize" aria-label="Minimize"></button>
+          <button type="button" data-max title="Maximize" aria-label="Maximize"></button>
+          <button type="button" data-close title="Close" aria-label="Close"></button>
+        </span>
+      </div>
+      <div class="body">
+        <div class="chatlog">
+          <p>&lt;14:02:11&gt; Priya Cole: can you see my whiteboard?</p>
+          <p>&lt;14:02:18&gt; Sam Okada: yes — love the blue arrow</p>
+          <p class="whisper">&lt;14:02:41&gt; Helen Voss (whisper): I’ll send the file in a second</p>
+          <p>&lt;14:02:55&gt; Priya Cole: hang on, cat incoming</p>
+        </div>
+        <div class="inputrow">
+          <span>Send to:</span>
+          <div class="btn combo">Everyone in this meeting</div>
+        </div>
+        <div class="inputrow">
+          <input value="ok sending now" aria-label="Chat message">
+          <button type="button" class="btn send">Send</button>
+        </div>
+      </div>
+      <div class="grip" data-resize></div>
+    </article>
+
+    <article class="win app small" id="win-idle" data-title="Helen Voss"
+      style="left:1052px;top:248px;width:188px;z-index:1">
+      <div class="titlebar" data-drag>
+        <span>NetGreeting</span>
+        <span class="dots">
+          <button type="button" data-min title="Minimize" aria-label="Minimize"></button>
+          <button type="button" data-max title="Maximize" aria-label="Maximize"></button>
+          <button type="button" data-close title="Close" aria-label="Close"></button>
+        </span>
+      </div>
+      <div class="menubar">
+        <span><u>C</u>all</span><span><u>V</u>iew</span><span><u>T</u>ools</span><span><u>H</u>elp</span>
+      </div>
+      <div class="body">
+        <img class="video" src="./assets/helen.jpg" alt="Helen Voss waiting">
+        <div class="row">
+          <button type="button" class="btn">Place Call</button>
+          <button type="button" class="btn">End Call</button>
+          <button type="button" class="btn" data-open="win-dir">Directory</button>
+        </div>
+        <div class="banner">Helen Voss</div>
+        <div class="small">Current Call / Meeting</div>
+        <div class="list">Helen Voss</div>
+        <div class="tools">
+          <button type="button" class="iconbtn" aria-hidden="true">🖥</button>
+          <button type="button" class="iconbtn" aria-hidden="true">💬</button>
+          <button type="button" class="iconbtn" aria-hidden="true">✎</button>
+          <button type="button" class="iconbtn" aria-hidden="true">📄</button>
+        </div>
+      </div>
+      <div class="status">Not in a call. Waiting on the directory.</div>
+      <div class="grip" data-resize></div>
+    </article>
+  </div>
+
+  <footer class="taskbar">
+    <button class="start" type="button" id="startBtn" aria-expanded="false" aria-controls="startMenu">
+      <img src="./assets/icon.png" width="16" height="16" alt=""> Start
+    </button>
+    <div class="start-menu" id="startMenu" hidden>
+      <div class="start-banner">NetGreeting</div>
+      <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-win64.exe">Windows
+        installer</a>
+      <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-Darwin.dmg">Macintosh
+        disk image</a>
+      <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting_0.1.0_amd64.deb">Ubuntu
+        / Debian</a>
+      <a
+        href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-1.x86_64.rpm">Fedora</a>
+      <hr>
+      <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest">All downloads</a>
+      <a href="https://github.com/pixelhackstudios/NetGreeting">GitHub</a>
+      <hr>
+      <button type="button" data-open="win-call">NetGreeting</button>
+      <button type="button" data-open="win-readme">Read Me.txt</button>
+    </div>
+    <div class="tasks" id="tasks"></div>
+    <div class="tray"><time id="clock">12:00 PM</time></div>
   </footer>
+
+  <script src="./desktop.js?v=12"></script>
 </body>
+
 </html>
