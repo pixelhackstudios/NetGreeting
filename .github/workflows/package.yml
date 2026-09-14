@@ -1,0 +1,72 @@
+name: Package
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  linux:
+    name: Linux .deb and .rpm
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build pkg-config \
+            qt6-base-dev libpulse-dev dpkg-dev rpm
+      - name: Package
+        run: bash scripts/package.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-packages
+          path: dist/*
+
+  windows:
+    name: Windows .exe
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.7.3"
+          archives: qtbase qttools
+      - name: Install NSIS
+        run: choco install nsis -y
+      - name: Configure
+        run: cmake -S . -B build-package -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build-package --config Release -j 4
+      - name: Package
+        working-directory: build-package
+        run: |
+          cpack -C Release -G NSIS
+          cpack -C Release -G ZIP
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-packages
+          path: dist/*
+
+  macos:
+    name: macOS .dmg
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Qt
+        run: brew install qt
+      - name: Configure
+        run: |
+          QTDIR="$(brew --prefix qt)"
+          cmake -S . -B build-package -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="${QTDIR}"
+      - name: Build
+        run: cmake --build build-package -j 4
+      - name: Package
+        working-directory: build-package
+        run: cpack -G DragNDrop
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-packages
+          path: dist/*

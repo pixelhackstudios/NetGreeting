@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.netgreeting.app</id>
+  <name>NetGreeting</name>
+  <summary>Video calls, chat, and whiteboard</summary>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <description>
+    <p>
+      NetGreeting is a desktop conferencing app in the spirit of Microsoft
+      NetMeeting. Place a call, chat, sketch on a shared whiteboard, send files,
+      and see who is online in the directory.
+    </p>
+  </description>
+  <launchable type="desktop-id">netgreeting.desktop</launchable>
+</component>

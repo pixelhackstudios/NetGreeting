@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=NetGreeting
+Comment=Video calls, chat, and whiteboard
+Exec=netgreeting
+Icon=netgreeting
+Terminal=false
+Categories=Network;VideoConference;Qt;
+StartupNotify=true
+Keywords=chat;video;call;conference;netmeeting;
