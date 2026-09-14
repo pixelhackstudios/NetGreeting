@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.22)
+
 set(root "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}")
 if("@WIN32@")
   foreach(app netgreeting greetingpost)

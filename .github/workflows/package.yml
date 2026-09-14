@@ -96,9 +96,10 @@ jobs:
             }
           }
           Test-Bundle $bins[0].DirectoryName
-          $install = "$env:RUNNER_TEMP/installer-test"
+          $install = Join-Path $env:RUNNER_TEMP 'installer-test'
           $p = Start-Process (Get-Item dist/*.exe).FullName -ArgumentList '/S', "/D=$install" -Wait -PassThru
           if ($p.ExitCode -ne 0) { throw "Installer failed" }
+          if (!(Test-Path "$install/bin/netgreeting.exe")) { throw "Installer did not create $install/bin/netgreeting.exe" }
           Test-Bundle "$install/bin"
       - uses: actions/upload-artifact@v4
         with:
@@ -110,7 +111,9 @@ jobs:
 
   macos:
     name: macOS .dmg
-    runs-on: macos-latest
+    runs-on: macos-15
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
     steps:
       - uses: actions/checkout@v4
       - uses: jurplel/install-qt-action@v4
