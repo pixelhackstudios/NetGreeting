@@ -20,7 +20,7 @@ jobs:
         run: |
           apt-get update
           apt-get install -y cmake ninja-build pkg-config \
-            qt6-base-dev qt6-wayland libpulse-dev libssl-dev dpkg-dev rpm \
+            qt6-base-dev qt6-wayland libgl1-mesa-dev libpulse-dev libssl-dev dpkg-dev rpm \
             python3 patchelf g++ file
       - name: Package
         run: bash scripts/package.sh
