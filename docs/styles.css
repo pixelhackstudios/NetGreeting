@@ -1,22 +1,37 @@
 :root {
-  --bg: #3d3a36;
+  --bg: #22232a;
   --ink: #f3efe6;
   --muted: #b7b0a5;
   --navy: #6d8cff;
-  --face: #2a2825;
-  --card: #2a2825;
+  --face: #22232a;
+  --card: #22232a;
   --line: #5a554c;
 }
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   font: 18px/1.5 "Liberation Sans", "Segoe UI", Tahoma, sans-serif;
   color: var(--ink);
   background: var(--bg);
 }
-a { color: #9db0ff; }
-.wrap { width: min(1080px, calc(100% - 40px)); margin: 0 auto; }
+
+a {
+  color: #9db0ff;
+}
+
+.wrap {
+  width: min(1080px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
 header {
   display: flex;
   align-items: center;
@@ -24,10 +39,34 @@ header {
   gap: 16px;
   padding: 18px 0;
 }
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: .02em; text-decoration: none; color: inherit; }
-.brand img { width: 40px; height: 40px; border-radius: 8px; }
-nav a { margin-left: 18px; text-decoration: none; color: var(--muted); font-size: 16px; }
-nav a:hover { color: var(--ink); }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  letter-spacing: .02em;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand img {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+nav a {
+  margin-left: 18px;
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+nav a:hover {
+  color: var(--ink);
+}
+
 .hero {
   display: grid;
   grid-template-columns: 1.05fr .95fr;
@@ -35,13 +74,26 @@ nav a:hover { color: var(--ink); }
   align-items: center;
   padding: 24px 0 56px;
 }
+
 h1 {
   font-size: clamp(36px, 5vw, 56px);
   line-height: 1.05;
   margin: 0 0 16px;
 }
-.lede { font-size: 20px; color: var(--muted); margin: 0 0 24px; max-width: 36rem; }
-.downloads { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.lede {
+  font-size: 20px;
+  color: var(--muted);
+  margin: 0 0 24px;
+  max-width: 36rem;
+}
+
+.downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -55,37 +107,88 @@ h1 {
   font-size: 16px;
   box-shadow: 3px 3px 0 #00000055;
 }
-.btn.secondary { background: #2a2825; color: var(--ink); border: 1px solid #6a655c; }
-.btn small { display: block; font-weight: 500; opacity: .85; font-size: 12px; }
+
+.btn.secondary {
+  background: #2a2825;
+  color: var(--ink);
+  border: 1px solid #6a655c;
+}
+
+.btn small {
+  display: block;
+  font-weight: 500;
+  opacity: .85;
+  font-size: 12px;
+}
+
 .hero-shot {
   width: 100%;
-  max-width: 420px;
+  max-width: 380px;
   justify-self: center;
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, .45));
 }
-.note { font-size: 14px; color: var(--muted); margin-top: 14px; }
-section { padding: 12px 0 56px; }
-h2 { font-size: 28px; margin: 0 0 18px; }
+
+.note {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 14px;
+}
+
+section {
+  padding: 12px 0 56px;
+}
+
+h2 {
+  font-size: 28px;
+  margin: 0 0 18px;
+}
+
 .shots {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: 28px 40px;
+  align-items: start;
 }
-.shots figure { margin: 0; }
+
+.shots figure {
+  margin: 0;
+  text-align: center;
+}
+
 .shots img {
-  width: 100%;
-  background: var(--bg);
-  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 640px;
+  display: inline-block;
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, .45));
 }
-.shots figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
-.shots .wide { grid-column: 1 / -1; }
-ol.steps { padding-left: 1.2em; }
-ol.steps li { margin: 8px 0; }
+
+.shots figcaption {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+.shots .wide {
+  grid-column: 1 / -1;
+}
+
+ol.steps {
+  padding-left: 1.2em;
+}
+
+ol.steps li {
+  margin: 8px 0;
+}
+
 .honest {
   background: var(--card);
   border: 1px solid var(--line);
   padding: 18px 20px;
   border-radius: 10px;
 }
+
 footer {
   border-top: 1px solid var(--line);
   padding: 24px 0 40px;
@@ -96,7 +199,15 @@ footer {
   gap: 12px;
   flex-wrap: wrap;
 }
+
 @media (max-width: 800px) {
-  .hero, .shots { grid-template-columns: 1fr; }
-  nav { display: none; }
+
+  .hero,
+  .shots {
+    grid-template-columns: 1fr;
+  }
+
+  nav {
+    display: none;
+  }
 }
