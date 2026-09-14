@@ -4,118 +4,93 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NetGreeting</title>
-  <meta name="description" content="A video-call app like Microsoft NetMeeting. No account. Type your name and see who is around.">
+  <meta name="description" content="A small video-call program, like Microsoft NetMeeting. No account.">
   <link rel="icon" href="./assets/icon.png">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css?v=6">
 </head>
 <body>
-  <div class="desktop">
-    <nav class="icons" aria-label="Downloads">
-      <a class="desk-icon" href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-win64.exe">
-        <img src="./assets/icon.png" alt="">
-        <span>Windows.exe</span>
-      </a>
-      <a class="desk-icon" href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-Darwin.dmg">
-        <img src="./assets/icon.png" alt="">
-        <span>Macintosh.dmg</span>
-      </a>
-      <a class="desk-icon" href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting_0.1.0_amd64.deb">
-        <img src="./assets/icon.png" alt="">
-        <span>Ubuntu.deb</span>
-      </a>
-      <a class="desk-icon" href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-1.x86_64.rpm">
-        <img src="./assets/icon.png" alt="">
-        <span>Fedora.rpm</span>
-      </a>
-      <a class="desk-icon" href="https://github.com/pixelhackstudios/NetGreeting">
-        <img src="./assets/icon.png" alt="">
-        <span>Source code</span>
-      </a>
-      <a class="desk-icon" href="#readme">
-        <span class="file-ico" aria-hidden="true">📄</span>
-        <span>Read Me.txt</span>
-      </a>
-    </nav>
+  <header class="top">
+    <a class="wordmark" href="./">
+      <img src="./assets/icon.png" width="36" height="36" alt="">
+      NetGreeting
+    </a>
+    <a class="src" href="https://github.com/pixelhackstudios/NetGreeting">Source on GitHub</a>
+  </header>
 
-    <div class="stage">
-      <img class="float dir" src="./assets/shot-directory.png?v=4" alt="Directory listing people who are online.">
-      <img class="float call" src="./assets/shot-call.png?v=4" alt="NetGreeting in a call.">
-      <img class="float chat" src="./assets/shot-chat.png?v=4" alt="Chat during a call.">
-      <img class="float board" src="./assets/shot-whiteboard.png?v=4" alt="Shared whiteboard.">
-      <img class="float idle" src="./assets/shot-idle.png?v=4" alt="Waiting for a call with the camera on.">
+  <main>
+    <section class="intro">
+      <p class="kicker">Version 0.1</p>
+      <h1>Call a person on another computer.</h1>
+      <p class="dek">
+        NetGreeting is a small video-call program in the spirit of Microsoft NetMeeting.
+        There is no account. You type your name, open the directory, and call whoever is on it.
+      </p>
+    </section>
 
-      <article class="notepad" id="readme">
-        <div class="tb">
-          <span>Untitled - Notepad</span>
-          <span class="win-btns" aria-hidden="true"><i></i><i></i><i></i></span>
-        </div>
-        <div class="menu">File&nbsp;&nbsp;Edit&nbsp;&nbsp;Search&nbsp;&nbsp;Help</div>
-        <pre>NetGreeting
-===========
+    <figure class="hero">
+      <img src="./assets/shot-call.png?v=4" alt="NetGreeting during a call. One person fills the video; a second person sits in the corner.">
+    </figure>
 
-A video-call program, like Microsoft
-NetMeeting on a beige PC in 1999.
+    <section class="get" id="download">
+      <h2>Get the program</h2>
+      <div class="files">
+        <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-win64.exe">
+          <strong>Windows</strong>
+          <span>netgreeting-0.1.0-win64.exe</span>
+        </a>
+        <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-Darwin.dmg">
+          <strong>Macintosh</strong>
+          <span>netgreeting-0.1.0-Darwin.dmg</span>
+        </a>
+        <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting_0.1.0_amd64.deb">
+          <strong>Ubuntu &amp; Debian</strong>
+          <span>netgreeting_0.1.0_amd64.deb</span>
+        </a>
+        <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-1.x86_64.rpm">
+          <strong>Fedora</strong>
+          <span>netgreeting-0.1.0-1.x86_64.rpm</span>
+        </a>
+      </div>
+      <p class="more"><a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest">Everything else, including a Windows zip</a></p>
+    </section>
 
-There is no account.
-Open it. Type your name.
-Call → Directory.
-If a friend is on the list, call them.
+    <section class="strip">
+      <figure>
+        <img src="./assets/shot-idle.png?v=4" alt="Waiting for a call, camera preview on.">
+        <figcaption>Waiting</figcaption>
+      </figure>
+      <figure>
+        <img src="./assets/shot-directory.png?v=4" alt="Directory of people who are online.">
+        <figcaption>Directory</figcaption>
+      </figure>
+      <figure>
+        <img src="./assets/shot-chat.png?v=4" alt="Text chat.">
+        <figcaption>Chat</figcaption>
+      </figure>
+      <figure>
+        <img src="./assets/shot-whiteboard.png?v=4" alt="Shared whiteboard.">
+        <figcaption>Whiteboard</figcaption>
+      </figure>
+    </section>
 
-Chat, whiteboard, files, desktop share.
+    <section class="how">
+      <h2>How you use it</h2>
+      <ol>
+        <li>Install it and open it.</li>
+        <li>Under <b>Tools → Options</b>, type your first name.</li>
+        <li>Open <b>Call → Directory</b>.</li>
+        <li>Click a name, then <b>Call</b>. If someone calls you, click <b>Accept</b>.</li>
+      </ol>
+      <p>While you are in a call you can chat, draw on a whiteboard, send a file, or share your screen (they can watch; they cannot take over).</p>
+      <p class="fine">The people in the pictures are stand-ins, not real users. Both of you need the app open at the same time. The directory is only a phone book — the call goes from your computer to theirs, and a home network may block it. Calls are not encrypted.</p>
+    </section>
+  </main>
 
-The people in the windows are stand-ins.
-
-Both of you need the app open.
-The directory is only a phone book;
-the call goes computer to computer.
-Not encrypted. Friends only.
-
-Double-click an icon on the left
-to download for your computer.
-</pre>
-      </article>
-    </div>
-  </div>
-
-  <footer class="taskbar">
-    <button class="start" type="button" id="startBtn" aria-expanded="false" aria-controls="startMenu">
-      <img src="./assets/icon.png" alt=""> Start
-    </button>
-    <div class="start-menu" id="startMenu" hidden>
-      <div class="start-banner">NetGreeting</div>
-      <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-win64.exe">Windows installer</a>
-      <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-Darwin.dmg">Macintosh disk image</a>
-      <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting_0.1.0_amd64.deb">Ubuntu / Debian</a>
-      <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-1.x86_64.rpm">Fedora</a>
-      <hr>
-      <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest">All downloads</a>
-      <a href="https://github.com/pixelhackstudios/NetGreeting">GitHub</a>
-    </div>
-    <div class="task">NetGreeting</div>
-    <div class="task">Read Me.txt</div>
-    <div class="tray"><time id="clock">12:00 PM</time></div>
+  <footer>
+    <p>NetGreeting. A call should start with hello.</p>
   </footer>
-
-  <script>
-    const startBtn = document.getElementById('startBtn');
-    const menu = document.getElementById('startMenu');
-    startBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const open = menu.hidden;
-      menu.hidden = !open;
-      startBtn.setAttribute('aria-expanded', String(open));
-    });
-    document.addEventListener('click', () => {
-      menu.hidden = true;
-      startBtn.setAttribute('aria-expanded', 'false');
-    });
-    function tick() {
-      document.getElementById('clock').textContent = new Date().toLocaleTimeString([], {
-        hour: 'numeric', minute: '2-digit'
-      });
-    }
-    tick();
-    setInterval(tick, 10000);
-  </script>
 </body>
 </html>
