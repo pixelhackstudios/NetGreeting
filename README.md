@@ -57,6 +57,10 @@ To build installers on the machine in front of you:
 ./scripts/package.sh
 ```
 
-Windows and Mac installers are built automatically on GitHub (Actions → Package).
+GitHub Actions → Package builds Linux DEB/RPM, Windows EXE/ZIP, and macOS DMG packages. Linux builds use Ubuntu 22.04 (glibc 2.35) as their baseline and include private copies of Qt, its plugins, PulseAudio client libraries, OpenSSL, and their transitive runtime libraries. Windows packages include Qt and the Visual C++ runtime; the Mac app includes Qt frameworks and dependencies for both programs. Deployment errors fail the build.
+
+Linux packages require glibc 2.35 or newer (Ubuntu 22.04+, Debian 12+, or a compatible Fedora system). The package manager installs font configuration and fonts if missing. The operating system supplies graphics drivers, a display server, an audio service, and CA certificates. Packages do not require system Qt packages. CI installs the DEB on Ubuntu 22.04/24.04 and Debian 12, and the RPM on Fedora 43, then checks GUI startup and call/chat handling without system Qt. Windows checks both the ZIP and installed EXE; macOS checks the app extracted from the DMG.
+
+Local Linux packaging requires CMake 3.22+, a C++20 compiler, Qt 6 development files and plugins, PulseAudio development files, OpenSSL 3, Python 3.10+, `patchelf`, and `dpkg-dev` (plus `rpm` for RPM output). Local packages use the build machine's glibc baseline; use the Actions build for the compatibility baseline above.
 
 NetGreeting. Because a call should start with hello.

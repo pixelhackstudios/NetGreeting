@@ -1,0 +1,18 @@
+set(root "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}")
+if("@WIN32@")
+  foreach(app netgreeting greetingpost)
+    execute_process(COMMAND "@WINDEPLOYQT_EXECUTABLE@" --no-translations
+      --compiler-runtime --release "${root}/@CMAKE_INSTALL_BINDIR@/${app}.exe"
+      COMMAND_ERROR_IS_FATAL ANY)
+  endforeach()
+elseif("@APPLE@")
+  execute_process(COMMAND "@MACDEPLOYQT_EXECUTABLE@"
+    "${root}/netgreeting.app" -always-overwrite
+    "-executable=${root}/netgreeting.app/Contents/MacOS/greetingpost"
+    COMMAND_ERROR_IS_FATAL ANY)
+elseif("@NG_BUNDLE_RUNTIME@")
+  execute_process(COMMAND "@Python3_EXECUTABLE@"
+    "@CMAKE_SOURCE_DIR@/scripts/bundle-linux.py"
+    "${root}" "@NG_QT_PLUGINS@" "@PATCHELF_EXECUTABLE@"
+    COMMAND_ERROR_IS_FATAL ANY)
+endif()

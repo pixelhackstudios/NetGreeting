@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22)
 project(NetGreeting VERSION 0.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -104,10 +104,20 @@ target_link_libraries(greetingpost PRIVATE Qt6::Network Qt6::Core)
 
 include(GNUInstallDirs)
 
-install(TARGETS netgreeting greetingpost
+option(NG_BUNDLE_RUNTIME "Bundle application dependencies for distribution" OFF)
+if(NG_BUNDLE_RUNTIME AND UNIX AND NOT APPLE)
+  set(CMAKE_INSTALL_BINDIR lib/netgreeting/bin)
+  set_target_properties(netgreeting greetingpost PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
+endif()
+install(TARGETS netgreeting
   BUNDLE DESTINATION .
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+if(APPLE)
+  install(TARGETS greetingpost RUNTIME DESTINATION netgreeting.app/Contents/MacOS)
+else()
+  install(TARGETS greetingpost RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
 
 if(UNIX AND NOT APPLE)
   install(FILES packaging/netgreeting.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
@@ -120,24 +130,24 @@ if(UNIX AND NOT APPLE)
   endif()
 endif()
 
-# Copy Qt runtime next to the app on Windows / macOS when packaging.
+# Deployment is mandatory for distributable packages and must fail closed.
 if(WIN32)
-  find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${Qt6_DIR}/../../../bin")
-  if(WINDEPLOYQT_EXECUTABLE)
-    install(CODE "
-      execute_process(COMMAND \"${WINDEPLOYQT_EXECUTABLE}\" --no-translations
-        --release \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/netgreeting.exe\")
-    ")
-  endif()
+  find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${Qt6_DIR}/../../../bin" REQUIRED)
+  set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION "${CMAKE_INSTALL_BINDIR}")
+  set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
+  include(InstallRequiredSystemLibraries)
 elseif(APPLE)
-  find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${Qt6_DIR}/../../../bin")
-  if(MACDEPLOYQT_EXECUTABLE)
-    install(CODE "
-      execute_process(COMMAND \"${MACDEPLOYQT_EXECUTABLE}\"
-        \"\${CMAKE_INSTALL_PREFIX}/netgreeting.app\" -always-overwrite)
-    ")
-  endif()
+  find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${Qt6_DIR}/../../../bin" REQUIRED)
+elseif(NG_BUNDLE_RUNTIME)
+  find_package(Python3 REQUIRED COMPONENTS Interpreter)
+  find_program(PATCHELF_EXECUTABLE patchelf REQUIRED)
+  get_target_property(NG_QMAKE Qt6::qmake IMPORTED_LOCATION)
+  execute_process(COMMAND "${NG_QMAKE}" -query QT_INSTALL_PLUGINS
+    OUTPUT_VARIABLE NG_QT_PLUGINS OUTPUT_STRIP_TRAILING_WHITESPACE
+    COMMAND_ERROR_IS_FATAL ANY)
 endif()
+configure_file(cmake/DeployRuntime.cmake.in DeployRuntime.cmake @ONLY)
+install(SCRIPT "${CMAKE_CURRENT_BINARY_DIR}/DeployRuntime.cmake")
 
 set(CPACK_PACKAGE_NAME "netgreeting")
 set(CPACK_PACKAGE_VENDOR "Pixelhack Studios")
@@ -167,7 +177,18 @@ else()
   set(CPACK_GENERATOR "DEB;RPM")
   set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Pixelhack Studios <hi@pixelhackstudios.com>")
   set(CPACK_DEBIAN_PACKAGE_SECTION "net")
-  set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+  if(NG_BUNDLE_RUNTIME)
+    # All userspace libraries except glibc are private to the application.
+    execute_process(COMMAND getconf GNU_LIBC_VERSION OUTPUT_VARIABLE NG_GLIBC
+      OUTPUT_STRIP_TRAILING_WHITESPACE COMMAND_ERROR_IS_FATAL ANY)
+    string(REPLACE "glibc " "" NG_GLIBC "${NG_GLIBC}")
+    set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS OFF)
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= ${NG_GLIBC}), fontconfig, fonts-dejavu-core")
+    set(CPACK_RPM_PACKAGE_AUTOREQPROV OFF)
+    set(CPACK_RPM_PACKAGE_REQUIRES "glibc >= ${NG_GLIBC}, fontconfig, dejavu-sans-fonts")
+  else()
+    set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+  endif()
   set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
   set(CPACK_RPM_PACKAGE_LICENSE "MIT")
   set(CPACK_RPM_PACKAGE_GROUP "Applications/Internet")

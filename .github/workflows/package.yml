@@ -10,13 +10,18 @@ jobs:
   linux:
     name: Linux .deb and .rpm
     runs-on: ubuntu-24.04
+    # Build against the oldest supported glibc, independent of the runner OS.
+    container: ubuntu:22.04
+    env:
+      DEBIAN_FRONTEND: noninteractive
     steps:
       - uses: actions/checkout@v4
       - name: Install build tools
         run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake ninja-build pkg-config \
-            qt6-base-dev libpulse-dev dpkg-dev rpm
+          apt-get update
+          apt-get install -y cmake ninja-build pkg-config \
+            qt6-base-dev qt6-wayland libpulse-dev libssl-dev dpkg-dev rpm \
+            python3 patchelf g++ file
       - name: Package
         run: bash scripts/package.sh
       - uses: actions/upload-artifact@v4
@@ -26,6 +31,25 @@ jobs:
             dist/*.deb
             dist/*.rpm
           if-no-files-found: error
+
+  linux-install-test:
+    name: Install Linux package (${{ matrix.image }})
+    needs: linux
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ["ubuntu:22.04", "ubuntu:24.04", "debian:12", "fedora:43"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: linux-packages
+          path: dist
+      - name: Install and exercise packaged programs without system Qt
+        run: |
+          docker run --rm -v "$PWD:/work:ro" "${{ matrix.image }}" \
+            bash /work/scripts/test-linux-package.sh
 
   windows:
     name: Windows .exe
@@ -39,7 +63,7 @@ jobs:
       - name: Install NSIS
         run: choco install nsis -y
       - name: Configure
-        run: cmake -S . -B build-package -DCMAKE_BUILD_TYPE=Release
+        run: cmake -S . -B build-package -DCMAKE_BUILD_TYPE=Release -DNG_BUNDLE_RUNTIME=ON
       - name: Build
         run: cmake --build build-package --config Release -j 4
       - name: Package
@@ -47,6 +71,29 @@ jobs:
         run: |
           cpack -C Release -G NSIS
           cpack -C Release -G ZIP
+      - name: Verify ZIP and installed EXE with Qt removed from PATH
+        shell: pwsh
+        run: |
+          $env:PATH = "$env:SystemRoot\System32;$env:SystemRoot"
+          Remove-Item Env:QT_PLUGIN_PATH -ErrorAction SilentlyContinue
+          Remove-Item Env:QT_QPA_PLATFORM_PLUGIN_PATH -ErrorAction SilentlyContinue
+          Expand-Archive (Get-Item dist/*.zip).FullName "$env:RUNNER_TEMP/zip-test"
+          $bins = Get-ChildItem "$env:RUNNER_TEMP/zip-test" -Filter netgreeting.exe -Recurse
+          if ($bins.Count -ne 1) { throw "Expected one packaged executable" }
+          function Test-Bundle($bin) {
+            foreach ($file in @('Qt6Core.dll', 'Qt6Gui.dll', 'Qt6Widgets.dll', 'Qt6Network.dll', 'platforms/qwindows.dll', 'vcruntime140.dll', 'msvcp140.dll')) {
+              if (!(Test-Path "$bin/$file")) { throw "Missing runtime: $file" }
+            }
+            foreach ($app in @('netgreeting', 'greetingpost')) {
+              $p = Start-Process "$bin/$app.exe" -ArgumentList '--version' -Wait -PassThru
+              if ($p.ExitCode -ne 0) { throw "$app failed: $($p.ExitCode)" }
+            }
+          }
+          Test-Bundle $bins[0].DirectoryName
+          $install = "$env:RUNNER_TEMP/installer-test"
+          $p = Start-Process (Get-Item dist/*.exe).FullName -ArgumentList '/S', "/D=$install" -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw "Installer failed" }
+          Test-Bundle "$install/bin"
       - uses: actions/upload-artifact@v4
         with:
           name: windows-packages
@@ -66,12 +113,18 @@ jobs:
         run: |
           QTDIR="$(brew --prefix qt)"
           cmake -S . -B build-package -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_PREFIX_PATH="${QTDIR}"
+            -DCMAKE_PREFIX_PATH="${QTDIR}" -DNG_BUNDLE_RUNTIME=ON
       - name: Build
         run: cmake --build build-package -j 4
       - name: Package
         working-directory: build-package
         run: cpack -G DragNDrop
+      - name: Verify application from disk image
+        run: |
+          hdiutil attach dist/*.dmg -mountpoint "$RUNNER_TEMP/netgreeting-dmg"
+          cp -R "$RUNNER_TEMP/netgreeting-dmg/netgreeting.app" "$RUNNER_TEMP/netgreeting.app"
+          hdiutil detach "$RUNNER_TEMP/netgreeting-dmg"
+          python3 scripts/test-macos-package.py "$RUNNER_TEMP/netgreeting.app"
       - uses: actions/upload-artifact@v4
         with:
           name: macos-packages

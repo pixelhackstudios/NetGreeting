@@ -23,7 +23,8 @@ fi
 
 cmake -S "${ROOT}" -B "${BUILD}" \
   -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_INSTALL_PREFIX=/usr
+  -DCMAKE_INSTALL_PREFIX=/usr \
+  -DNG_BUNDLE_RUNTIME=ON
 cmake --build "${BUILD}" -j"${JOBS}"
 
 cd "${BUILD}"
@@ -34,7 +35,7 @@ case "${os}" in
     echo "Building Linux packages (.deb, and .rpm if possible)..."
     cpack -G DEB
     if command -v rpmbuild >/dev/null 2>&1; then
-      cpack -G RPM || echo "RPM packaging skipped (rpmbuild failed)."
+      cpack -G RPM
     else
       echo "RPM packaging skipped (install rpm-build to produce .rpm)."
     fi
@@ -45,7 +46,7 @@ case "${os}" in
     ;;
   MINGW*|MSYS*|CYGWIN*|Windows_NT)
     echo "Building Windows installer (.exe) and zip..."
-    cpack -G NSIS || echo "NSIS installer skipped (install NSIS)."
+    cpack -G NSIS
     cpack -G ZIP
     ;;
   *)
