@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="./ui.css">
+  <style>body{display:grid;place-items:center;min-height:100vh;padding:32px;}</style>
+</head>
+<body>
+  <div class="window wide">
+    <div class="titlebar">NetGreeting - Whiteboard <span class="dots"><span></span><span></span><span></span></span></div>
+    <div class="body">
+      <div class="palette">
+        <div class="btn" style="flex:0 0 auto;">Pen</div>
+        <div class="btn" style="flex:0 0 auto;">Highlight</div>
+        <div class="btn" style="flex:0 0 auto;">Rect</div>
+        <div class="btn" style="flex:0 0 auto;">Text</div>
+        <div class="swatch" style="background:#000"></div>
+        <div class="swatch" style="background:#00c"></div>
+        <div class="swatch" style="background:#c00"></div>
+        <div class="swatch" style="background:#060"></div>
+        <div class="btn" style="flex:0 0 auto;margin-left:auto;">Clear</div>
+      </div>
+      <div class="board">
+        <svg class="stroke" viewBox="0 0 520 280">
+          <path d="M40 200 C 80 40, 160 40, 210 160" fill="none" stroke="#0033aa" stroke-width="3" stroke-linecap="round"/>
+          <rect x="280" y="70" width="120" height="80" fill="none" stroke="#cc0000" stroke-width="2"/>
+          <text x="40" y="250" fill="#060" font-size="18" font-family="sans-serif">ship Friday?</text>
+        </svg>
+        <div class="pointer"><span>Priya</span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

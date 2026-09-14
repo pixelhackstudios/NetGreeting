@@ -8,7 +8,8 @@ You can see who’s online, call them, talk, chat, draw on a shared whiteboard, 
 
 Download the installer for your computer:
 
-**[Download NetGreeting](https://github.com/pixelhackstudios/NetGreeting/releases/latest)**
+**[NetGreeting website](https://pixelhackstudios.github.io/NetGreeting/)** ·
+**[Download](https://github.com/pixelhackstudios/NetGreeting/releases/latest)**
 
 | Your computer | Which file | What to do |
 |---|---|---|

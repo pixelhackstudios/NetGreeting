@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="./ui.css">
+  <style>body{display:grid;place-items:center;min-height:100vh;padding:32px;}</style>
+</head>
+<body>
+  <div class="window wide">
+    <div class="titlebar">NetGreeting - Directory <span class="dots"><span></span><span></span><span></span></span></div>
+    <div class="body">
+      <p style="margin:0 0 8px;">This is the shared NetGreeting directory. Anyone who is running the app and listed here can be called.</p>
+      <div class="tabs"><div class="tab on">Greeting Post</div><div class="tab">Nearby</div><div class="tab">SpeedDial</div></div>
+      <p style="margin:0 0 8px;color:#333;">Logged on to Greeting Post as Helen Voss.</p>
+      <table>
+        <thead><tr><th>Name</th><th>City</th><th>Address</th><th>Port</th><th>Comments</th></tr></thead>
+        <tbody>
+          <tr class="you"><td>Helen Voss (you)</td><td>Portland</td><td>203.0.113.12</td><td>1720</td><td></td></tr>
+          <tr><td>Priya Cole</td><td>Austin</td><td>198.51.100.44</td><td>1720</td><td>coffee first</td></tr>
+          <tr><td>Sam Okada</td><td>Chicago</td><td>192.0.2.81</td><td>1721</td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="row" style="justify-content:flex-start;margin-top:10px;">
+        <div class="btn" style="flex:0 0 80px;">Call</div>
+        <div class="btn" style="flex:0 0 140px;">Add to SpeedDial</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

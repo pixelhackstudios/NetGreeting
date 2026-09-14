@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NetGreeting — a simple video-call app</title>
+  <meta name="description" content="See who’s online, call them, talk, chat, and draw together. No account. Like Microsoft NetMeeting used to be.">
+  <link rel="icon" href="./assets/icon.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="./">
+        <img src="./assets/icon.png" alt="">
+        NetGreeting
+      </a>
+      <nav>
+        <a href="#download">Download</a>
+        <a href="#look">Screenshots</a>
+        <a href="#how">How to use it</a>
+        <a href="https://github.com/pixelhackstudios/NetGreeting">Source</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <div>
+        <h1>Call someone. No account. No fuss.</h1>
+        <p class="lede">
+          NetGreeting is a simple video-call app, like Microsoft NetMeeting used to be.
+          Open it, type your name, and see who else is around.
+        </p>
+        <div class="downloads" id="download">
+          <a class="btn" href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-win64.exe">
+            Windows
+            <small>.exe installer</small>
+          </a>
+          <a class="btn" href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-Darwin.dmg">
+            Mac
+            <small>.dmg — drag to Applications</small>
+          </a>
+          <a class="btn secondary" href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting_0.1.0_amd64.deb">
+            Ubuntu / Debian
+            <small>.deb package</small>
+          </a>
+          <a class="btn secondary" href="https://github.com/pixelhackstudios/NetGreeting/releases/latest/download/netgreeting-0.1.0-1.x86_64.rpm">
+            Fedora
+            <small>.rpm package</small>
+          </a>
+        </div>
+        <p class="note">
+          More files, including a Windows zip, are on the
+          <a href="https://github.com/pixelhackstudios/NetGreeting/releases/latest">releases page</a>.
+        </p>
+      </div>
+      <img class="hero-shot" src="./assets/shot-call.png" alt="NetGreeting in a call. Priya is on the big video, Sam is in the small corner window.">
+    </div>
+
+    <section id="look">
+      <h2>What it looks like</h2>
+      <p class="lede" style="margin-bottom:20px;">The people in these pictures are stand-ins, not real users.</p>
+      <div class="shots">
+        <figure>
+          <img src="./assets/shot-idle.png" alt="Helen waiting for a call, with her camera preview showing.">
+          <figcaption>Waiting for a call. Your camera shows in the window.</figcaption>
+        </figure>
+        <figure>
+          <img src="./assets/shot-call.png" alt="A call in progress with two people on camera.">
+          <figcaption>In a call. The other person fills the screen; you sit in the corner.</figcaption>
+        </figure>
+        <figure class="wide">
+          <img src="./assets/shot-directory.png" alt="The directory listing Helen, Priya, and Sam.">
+          <figcaption>The directory. If someone has the app open, they show up here. Click a name, then Call.</figcaption>
+        </figure>
+        <figure>
+          <img src="./assets/shot-chat.png" alt="A chat window with a few messages.">
+          <figcaption>Chat, including a quiet whisper to one person.</figcaption>
+        </figure>
+        <figure>
+          <img src="./assets/shot-whiteboard.png" alt="A shared whiteboard with a sketch and a remote pointer labeled Priya.">
+          <figcaption>Whiteboard. Draw together. Each person gets a pointer.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="how">
+      <h2>How to use it</h2>
+      <ol class="steps">
+        <li>Install NetGreeting and open it.</li>
+        <li>Go to <strong>Tools → Options</strong> and type your first name.</li>
+        <li>Go to <strong>Call → Directory</strong>.</li>
+        <li>If a friend is on the list, click their name, then <strong>Call</strong>.</li>
+        <li>When someone calls you, click <strong>Accept</strong>.</li>
+      </ol>
+      <p>During a call you can chat, sketch on the whiteboard, send a file, or share your desktop (they can look, not take over).</p>
+    </section>
+
+    <section>
+      <div class="honest">
+        <h2>A couple of honest notes</h2>
+        <ul>
+          <li>Both people need the app open at the same time.</li>
+          <li>The directory is only a phone book. The call itself goes from your computer to theirs. Home networks sometimes block that, just like old NetMeeting.</li>
+          <li>This is a hobby project. Calls are not encrypted. Use it with people you trust.</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>
+      <div>NetGreeting. Because a call should start with hello.</div>
+      <div><a href="https://github.com/pixelhackstudios/NetGreeting">github.com/pixelhackstudios/NetGreeting</a></div>
+    </footer>
+  </div>
+</body>
+</html>
