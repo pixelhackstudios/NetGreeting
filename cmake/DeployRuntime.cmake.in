@@ -12,6 +12,15 @@ elseif("@APPLE@")
     "${root}/netgreeting.app" -always-overwrite -codesign=-
     "-executable=${root}/netgreeting.app/Contents/MacOS/greetingpost"
     COMMAND_ERROR_IS_FATAL ANY)
+  # macdeployqt can leave an additional command-line executable's signature
+  # stale after rewriting its load commands. Sign it before sealing the bundle.
+  execute_process(COMMAND codesign --force --sign -
+    "${root}/netgreeting.app/Contents/MacOS/greetingpost"
+    COMMAND_ERROR_IS_FATAL ANY)
+  execute_process(COMMAND codesign --force --deep --sign - "${root}/netgreeting.app"
+    COMMAND_ERROR_IS_FATAL ANY)
+  execute_process(COMMAND codesign --verify --deep --strict "${root}/netgreeting.app"
+    COMMAND_ERROR_IS_FATAL ANY)
 elseif("@NG_BUNDLE_RUNTIME@")
   execute_process(COMMAND "@Python3_EXECUTABLE@"
     "@CMAKE_SOURCE_DIR@/scripts/bundle-linux.py"

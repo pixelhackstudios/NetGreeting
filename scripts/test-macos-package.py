@@ -22,8 +22,11 @@ for path in app.rglob("*"):
     kind = subprocess.check_output(["file", "-b", str(path)], text=True)
     if "Mach-O" not in kind:
         continue
-    lines = subprocess.check_output(["otool", "-L", str(path)], text=True).splitlines()[1:]
+    lines = subprocess.check_output(["otool", "-L", str(path)], text=True).splitlines()
     for line in lines:
+        # Universal binaries have a separate unindented header per architecture.
+        if not line.startswith("\t"):
+            continue
         dependency = line.strip().split(" (", 1)[0]
         if dependency.startswith("/") and not dependency.startswith(("/usr/lib/", "/System/Library/")):
             raise SystemExit(f"External dependency: {path}: {dependency}")
