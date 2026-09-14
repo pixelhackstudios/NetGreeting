@@ -72,9 +72,11 @@ jobs:
           cpack -C Release -G NSIS
           cpack -C Release -G ZIP
       - name: Verify ZIP and installed EXE with Qt removed from PATH
+        timeout-minutes: 5
         shell: pwsh
         run: |
           $env:PATH = "$env:SystemRoot\System32;$env:SystemRoot"
+          $env:QT_COMMAND_LINE_PARSER_NO_GUI_MESSAGE_BOXES = '1'
           Remove-Item Env:QT_PLUGIN_PATH -ErrorAction SilentlyContinue
           Remove-Item Env:QT_QPA_PLATFORM_PLUGIN_PATH -ErrorAction SilentlyContinue
           Expand-Archive (Get-Item dist/*.zip).FullName "$env:RUNNER_TEMP/zip-test"
@@ -85,7 +87,11 @@ jobs:
               if (!(Test-Path "$bin/$file")) { throw "Missing runtime: $file" }
             }
             foreach ($app in @('netgreeting', 'greetingpost')) {
-              $p = Start-Process "$bin/$app.exe" -ArgumentList '--version' -Wait -PassThru
+              Write-Host "Checking $bin/$app.exe"
+              $p = Start-Process "$bin/$app.exe" -ArgumentList '--version' -PassThru -RedirectStandardOutput "$env:RUNNER_TEMP/$app-version.txt" -RedirectStandardError "$env:RUNNER_TEMP/$app-error.txt"
+              if (!$p.WaitForExit(30000)) { $p.Kill(); throw "$app startup timed out" }
+              Get-Content "$env:RUNNER_TEMP/$app-version.txt"
+              Get-Content "$env:RUNNER_TEMP/$app-error.txt"
               if ($p.ExitCode -ne 0) { throw "$app failed: $($p.ExitCode)" }
             }
           }
@@ -107,13 +113,14 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Qt
-        run: brew install qt
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.7.3"
+          archives: qtbase qttools
       - name: Configure
         run: |
-          QTDIR="$(brew --prefix qt)"
           cmake -S . -B build-package -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_PREFIX_PATH="${QTDIR}" -DNG_BUNDLE_RUNTIME=ON
+            -DNG_BUNDLE_RUNTIME=ON
       - name: Build
         run: cmake --build build-package -j 4
       - name: Package
@@ -121,7 +128,7 @@ jobs:
         run: cpack -G DragNDrop
       - name: Verify application from disk image
         run: |
-          hdiutil attach dist/*.dmg -mountpoint "$RUNNER_TEMP/netgreeting-dmg"
+          printf 'Y\n' | hdiutil attach dist/*.dmg -mountpoint "$RUNNER_TEMP/netgreeting-dmg"
           cp -R "$RUNNER_TEMP/netgreeting-dmg/netgreeting.app" "$RUNNER_TEMP/netgreeting.app"
           hdiutil detach "$RUNNER_TEMP/netgreeting-dmg"
           python3 scripts/test-macos-package.py "$RUNNER_TEMP/netgreeting.app"

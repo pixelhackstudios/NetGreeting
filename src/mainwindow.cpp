@@ -268,12 +268,12 @@ void MainWindow::buildUi()
 void MainWindow::buildMenus()
 {
   auto *call = menuBar()->addMenu(tr("&Call"));
-  call->addAction(tr("&New Call..."), QKeySequence::New, this, &MainWindow::showPlaceCall);
+  call->addAction(tr("&New Call..."), this, &MainWindow::showPlaceCall)->setShortcut(QKeySequence::New);
   call->addAction(tr("&Directory..."), this, &MainWindow::showDirectory);
   call->addSeparator();
   call->addAction(tr("&Hang Up"), this, [this] { m_conf->hangup(); });
   call->addSeparator();
-  call->addAction(tr("E&xit"), QKeySequence::Quit, this, &QWidget::close);
+  call->addAction(tr("E&xit"), this, &QWidget::close)->setShortcut(QKeySequence::Quit);
 
   auto *view = menuBar()->addMenu(tr("&View"));
   auto *compact = view->addAction(tr("&Compact"));
